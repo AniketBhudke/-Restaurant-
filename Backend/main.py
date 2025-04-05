@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import mysql.connector
 
@@ -77,3 +79,8 @@ def login(user: LoginRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+app.mount("/static", StaticFiles(directory="Fronted/Code"), name="static")
+
+@app.get("/")
+def read_root():
+    return FileResponse("Fronted/Code/index.html")
